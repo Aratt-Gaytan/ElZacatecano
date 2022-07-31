@@ -65,6 +65,7 @@ const createPayment = (req, res) => {
     var total = req.body.total;
     var num = req.body.num;
     var id_prod = req.body.id_prod;
+    var dbTienda = DB.connDB;
     // console.log(num);
     // console.log(id_prod);
     for(let i = 0; i< num.length; i++){
@@ -129,7 +130,8 @@ const executePayment = (req, res) => {
             var codigo = response.body.purchase_units[0].payments.captures[0].amount.currency_code;
             var gross_amount = response.body.purchase_units[0].payments.captures[0].seller_receivable_breakdown.gross_amount.value; 
             var paypal_fee = response.body.purchase_units[0].payments.captures[0].seller_receivable_breakdown.paypal_fee.value; 
-            var net_amount = response.body.purchase_units[0].payments.captures[0].seller_receivable_breakdown.net_amount.value; 
+            var net_amount = response.body.purchase_units[0].payments.captures[0].seller_receivable_breakdown.net_amount.value;
+            var dbTienda = DB.connDB; 
             dbTienda.query("select c.inventario_inventario_id, c.cantidad as cant_ca,  i.cantidad "+
             " from usuario_has_inventario c"+
             " join inventario i on i.inventario_id = c.inventario_inventario_id"+
@@ -208,6 +210,7 @@ app.post("/agregacarrito", function (req, res){
     let id =  req.session.user;
     let inv_id = req.body.id_inv;
     console.log(id, inv_id);
+    var dbTienda = DB.connDB;
     dbTienda.query("INSERT INTO usuario_has_inventario (usuario_usuario_id, inventario_inventario_id) VALUES (?, ?);",
     [id, inv_id],(err, rows, fields) => {
         if (err) {
@@ -247,6 +250,7 @@ app.get("/getcarrito", function(req, res){
     let id =  req.session.user;
     // console.log(id)
     respuesta = {};
+    var dbTienda = DB.connDB;
     dbTienda.query("select u.usuario_id, i.inventario_id, i.producto, i.precio, i.cantidad"+
     " from inventario i "+
     " join usuario_has_inventario ui on i.inventario_id = ui.inventario_inventario_id"+
@@ -329,7 +333,7 @@ app.get("/registrarse", function (req, res) {
 });
 app.post("/registrar", function (req, res) {
     /* Creating a connection to the dbTienda. */
-    
+    var dbTienda = DB.connDB;
     /* Getting the values from the form. */
     let nom = req.body.nombre;
     let app = req.body.app;
@@ -360,6 +364,7 @@ app.get("/inventario", function (req, res) {
 
 app.get("/productos", (req, res) => {
     respuesta = {};
+    var dbTienda = DB.connDB;
     dbTienda.query(" select i.inventario_id , i.producto , i.cantidad , i.precio , d.departamento_id , d.nombre from inventario i, departamento d where i.departamento_id = d.departamento_id group by 1;", 
     (err, rows, fields) => {
         if (err) {
@@ -376,6 +381,7 @@ app.get("/productos", (req, res) => {
 
 app.get("/categorias", (req, res) => {
     respuesta = {};
+    var dbTienda = DB.connDB;
     dbTienda.query(" select * from  departamento ;", 
     (err, rows, fields) => {
         if (err) {
@@ -405,6 +411,7 @@ app.post("/act_inv", (request,response) => {
     const precio = request.body.precio;
     const categoria = request.body.departamento;
     var respuesta = {};
+    var dbTienda = DB.connDB;
     dbTienda.query('UPDATE inventario SET producto = ?, cantidad = ?, precio = ? , departamento_id = ? WHERE inventario.inventario_id = ? ; ',[producto,cantidad,precio, categoria, id], function (err,rows,fields){ 
     if(!err){ 
         respuesta.estado = true; 
@@ -424,7 +431,7 @@ app.post("/act_inv", (request,response) => {
 
 app.post("/elimi_inv", (request,response) => { 
     const id = request.body.id;
-    
+    var dbTienda = DB.connDB;
     var respuesta = {};
     dbTienda.query('DELETE FROM inventario WHERE inventario.inventario_id = ? ; ',[id], function (err,rows,fields){ 
     if(!err){ 
@@ -459,7 +466,8 @@ app.post("/agregarinv", verifyToken, (request,response) => {
     jwt.verify(request.token,'accessKey', (err,authData) => {
     if(err){
         response.sendStatus(403); 
-    }else{        
+    }else{  
+        var dbTienda = DB.connDB;      
         dbTienda.query('insert into inventario values (?,?,?,?)',[id,producto,cantidad,precio], function (err,rows,fields){ 
         if(!err){ 
             respuesta.estado = true; 
@@ -488,6 +496,7 @@ app.post("/nuevoProducto", (request,response) => {
     // console.log(request.body);
     // console.log("----------------------------------------------");
     var respuesta = {};
+    var dbTienda = DB.connDB;
         dbTienda.query('INSERT INTO inventario (producto, cantidad, precio, departamento_id) VALUES (?,?,?,?);',[producto,cantidad,precio,categoria], function (err,rows,fields){ 
         if(!err){ 
         
@@ -511,6 +520,7 @@ app.post("/nuevacat", (request,response) => {
     const departamento_id = request.body.departamento_id; 
     const nombre = request.body.cantidad; 
     var respuesta = {}; 
+    var dbTienda = DB.connDB;
         dbTienda.query('insert into departamento values (?,?)',[departamento_id,nombre], function (err,rows,fields){ 
         if(!err){ 
             respuesta.estado = true; 
