@@ -530,8 +530,8 @@ app.get("/admininv", function (req, res) {
     /* Rendering the page admininv.ejs */
     res.render("pages/admininv");
 });
-app.listen(3000);
-console.log("I`m running in port 3000");
+app.listen(process.env.PORT || 5000);
+console.log("I`m running in port 5000");
 /* 
 <%- include('../partial/head.ejs'); %>
 <%- include('../partial/head_wa.ejs'); %>
