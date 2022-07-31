@@ -1,0 +1,141 @@
+<%- include('../partial/head.ejs'); %>
+    <%- include('../partial/menu.ejs'); %>
+
+        <div class="container">
+            <div class="row pt-5 pb-5">
+                <div class="col-6">
+
+
+                    <script>
+                        var total__=0;
+                        var num_productos = [];
+                        var id_productos=[];
+                        function elimcarrito(id) {
+                            carrito = {};
+                            carrito.id = id;
+                            axios.post("/elimcarrito", carrito).then((response) => {
+                                console.log(response);
+                                alert("producto elimindado con exito");
+                                location.reload(true);
+                            })
+                                .catch((error) => {
+                                    console.log(error);
+                                    alert("ha ocurrido un error");
+                                    location.reload(true);
+                                });
+                        };
+                        function pagar() {
+                            
+                            pago = {};
+                            pago.total = total__;
+                            pago.num = num_productos;
+                            pago.id_prod = id_productos;
+                            axios.post("/create-payment", pago).then((response) => {
+                                console.log(response.data.links);
+                                window.location.replace(response.data.links[1].href);
+
+                            })
+                                .catch((error) => {
+                                    console.log(error);
+
+                                });
+                        };
+                        function actu_prec(i, n, u){
+                            
+                            var cant = parseInt(document.getElementById(`cant${i}`).value, 10);
+                            var newprec = cant * n
+                            document.getElementById(`precio${i}`).value = newprec;
+                            act_total(u);
+                            
+                        };
+                        function actu_cant(l){
+                            num_productos = [];
+                            for( let p = 0; p < l; p++){
+                                
+                                num_productos.push(document.getElementById(`cant${p}`).value);
+                                console.log(num_productos);
+                                
+                            }
+                        }
+                        function act_total(c){
+                            console.log(c);
+                            var total = 0;
+                            for(let m = 0; m < c ;m++){
+                                total += parseInt(document.getElementById(`precio${m}`).value, 10);
+
+                            }
+                            document.getElementById("total_").textContent = `Total a pagar $${total}`
+                            total__ = total;
+                            
+                            actu_cant(c);
+                            
+                            
+                        };
+                    </script>
+                    
+                    <table class="table table-warning table-striped">
+                        <thead class="text-center">
+                            <tr>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center table-group-divider contenido">
+                        </tbody>
+                        <script>
+
+                            axios.get("http://localhost:3000/getcarrito")
+                                .then((response) => {
+                                    console.log(response.data);
+                                    var cantidad = response.data.length;
+                                    
+                                    for (i = 0; i < cantidad; i++) {
+                                        id_productos.push(response.data[i].inventario_id);
+                                        console.log(id_productos);
+                                        const app = document.createElement("tr");
+                                        app.id = "app" + i;
+                                        app.className += "";
+                                        var precio = response.data[i].precio;
+                                        app.innerHTML =
+                                            
+                                        '<td>' +
+                                            '    <p> '+response.data[i].producto+'</p>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '    <input type="number" class="form-control" name="cant" id="cant'+i+'" value = "1" height="80" min = "1" max = "'+response.data[i].cantidad+'" onchange=" actu_prec('+i+', '+precio+', '+cantidad+')" >' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '    <p>$<input type="text" class="form-control" id="precio'+i+'"  readonly value= "'+response.data[i].precio+'" height="80"> </p>' +
+                                        '</td>' +
+                                        '<td> ' +
+                                        '    <a onClick=elimcarrito('+ response.data[i].inventario_id +') class="warning"> <h6> <i class="ri-delete-bin-2-line"></i> Eliminar </h6></a>' +
+                                        '</td>';
+                                        const ant = document.querySelector(".contenido");
+                                        ant.insertAdjacentElement("afterbegin", app);
+
+                                        
+    
+    
+                                    }
+                                    act_total(cantidad);
+                                });
+    
+                                
+                                
+    
+                        </script>
+    
+                    </table>
+                </div>
+                <div class="col-6 text-center">
+                    <h4 class="pb-5" id="total_"> Total a pagar $---.--</h4>
+                    
+                    <button type="button" class="btn btn-primary" onClick="pagar()" ><i class="ri-paypal-line"></i> Paga con
+                        PayPal</button>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partial/footer.ejs'); %>

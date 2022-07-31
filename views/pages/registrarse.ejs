@@ -1,0 +1,48 @@
+<%- include('../partial/head.ejs'); %>
+<%- include('../partial/head_wa.ejs'); %>
+<div class="container pt-4 pb-5">
+    <div class="row" >
+        <div class="col-2"></div>
+        
+        <form action="/registrar" method="post" class="col-8">
+            <h1 class="text-center">Registrarse</h1>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Nombre</span>
+                <input type="text" class="form-control" placeholder="Nombre..." aria-label="Nombre" aria-describedby="basic-addon1" id="nombre" name="nombre">
+                <input type="text" class="form-control" placeholder="Apellido paterno..." aria-label="Ap_pa" aria-describedby="basic-addon1" id="app" name="app">
+                <input type="text" class="form-control" placeholder="Apellido materno..." aria-label="Ap_ma" aria-describedby="basic-addon1" id="apm" name ="apm">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Correo</span>
+                <input type="email" class="form-control" placeholder="Correo Electronico..." aria-label="email" aria-describedby="basic-addon1" id="email" name="email">
+                <span class="input-group-text" id="basic-addon1">N° celular</span>
+                <input type="text" class="form-control" placeholder="Celular" aria-label="celular" aria-describedby="basic-addon1" id="cel" name="cel"> 
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Direccion</span>
+                <input type="text" class="form-control" placeholder="Calle..." aria-label="calle" aria-describedby="basic-addon1" id="calle" name="calle" >
+                <span class="input-group-text" id="basic-addon1">#</span>
+                <input type="text" class="form-control" placeholder="Numero..." aria-label="num" aria-describedby="basic-addon1" id="num" name="num">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Direccion</span>
+                <input type="text" class="form-control" placeholder="Fraccionamiento..." aria-label="fracc" aria-describedby="basic-addon1" id="frac" name="frac">
+                <input type="text" class="form-control" placeholder="Municipio..." aria-label="mun" aria-describedby="basic-addon1" id="mun" name="mun">
+                <input type="text" class="form-control" placeholder="Estado..." aria-label="est" aria-describedby="basic-addon1" id="est" name="est">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Contraseña</span>
+                <input type="password" class="form-control" placeholder="Escribe tu contraseña..." aria-label="contra" aria-describedby="basic-addon1" id="pass" name="pass">
+                <input type="password" class="form-control" placeholder="Repite tu contraseña..." aria-label="contra2" aria-describedby="basic-addon1" id="pass2" name="pass2">
+
+            </div>
+            <div class="input-group mb-3 justify-content-center" >
+                <button class="btn btn-warning " type="submit" id="reg" >Registrarte</button>
+
+            </div>
+        </form>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+<%- include('../partial/footer2.ejs'); %>

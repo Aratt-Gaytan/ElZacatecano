@@ -1,0 +1,154 @@
+<%- include('../partial/head.ejs'); %>
+<%- include('../partial/menu.ejs'); %>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://releases.jquery.com/git/jquery-3.x-git.js"></script>
+<script>
+    function viajar(){
+            window.location.replace("consulta.html");
+        };
+        function elimi_inve(id){
+            var inventario={};
+            inventario.id = id;            
+            console.log(inventario);
+            axios.post('http://localhost:3000/elimi_inv',inventario).then((response)=>{
+                
+                console.log(response.inventario);
+                alert("Producto eliminado...");
+                location.reload(true);
+                
+                //window.location.href="productos.html";
+            })
+            .catch((error)=>{
+                alert("Error al eliminar");
+                console.log(error);
+                location.reload(true);
+                
+            });
+        }
+        function actua_inve(id){
+            var inventario={};
+            inventario.id = id;
+            inventario.producto = document.getElementById("pro"+id).value;
+            inventario.cantidad = document.getElementById("can"+id).value;
+            inventario.precio = document.getElementById("pre"+id).value;
+            inventario.departamento = document.getElementById("dep"+id).value;
+            
+            console.log(inventario);
+            axios.post('http://localhost:3000/act_inv',inventario).then((response)=>{
+                
+                console.log(response.inventario);
+                alert("Producto actualizado...");
+                location.reload(true);
+                
+                //window.location.href="productos.html";
+            })
+            .catch((error)=>{
+                alert("Error al actualizar");
+                console.log(error);
+                location.reload(true);
+                
+            });
+        }
+    </script>
+<form action="/act_inv" method="post">
+    <div class="container mt-3">
+        <a class="btn btn-warning" type="button" href="/inventario">Regresar</a>
+
+        
+        
+        <div class="row pt-1 pb-5">
+            
+            <table class="table table-warning table-striped mt-3">
+                <thead class="text-center">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col"> Cantidad en almacen</th>
+                        <th scope="col"> Departamento</th>
+                        <th scope="col"></thscope>
+                    </tr>
+                </thead>
+                <tbody class="text-center table-group-divider contenido">
+                    
+
+                
+                </tbody>
+                <script>
+                    function categoria_select(i, cate){
+                        axios.get("http://localhost:3000/categorias")
+                    .then((res)=>{
+                    console.log(res);
+                    var cant = res.data.length;
+                    // console.log(".lista"+i);
+                    for(a=0;a<cant;a++){
+                                
+                        const app1 = document.createElement("option"); // <div></div>
+                        app1.id = "departamento"+a; 
+                        app1.value += res.data[a].departamento_id;
+                        app1.innerHTML = res.data[a].nombre;    
+                        const ant1 = document.querySelector(".lista"+i); 
+                        ant1.insertAdjacentElement("beforeend", app1);
+                        // console.log("--------------");
+                        // console.log(i);
+                        // console.log("--------------");
+                        if(res.data[a].departamento_id == cate){
+                            ant1.value = res.data[a].departamento_id;
+                        }
+                    }
+                    });
+                    }
+                    axios.get("http://localhost:3000/productos")
+            .then((response)=>{
+            console.log(response);
+            var cantidad = response.data.length;
+            
+            for(i=0;i<cantidad;i++){
+                var cate = response.data[i].departamento_id;
+                console.log("cate : " + cate);
+                const app = document.createElement("tr");  
+                    app.id = "app"+i; 
+                    app.className += ""
+                    app.innerHTML =
+                        '<td>'+
+                        '    <img src="/img/queso.png" alt="..." height="80" width="100">'+
+                        '   <input type="file" class="form-control" >'+
+                        
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" class="form-control" aria-label="descripcion" value="'+response.data[i].producto+'" aria-describedby="basic-addon1" id="pro'+response.data[i].inventario_id+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" class="form-control" aria-label="precio" value ="'+ response.data[i].precio +'" aria-describedby="basic-addon1" id="pre'+response.data[i].inventario_id+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="number" class="form-control" aria-label="cantidad" value="'+ response.data[i].cantidad +'" aria-describedby="basic-addon1" id="can'+response.data[i].inventario_id+'">'+
+                        '</td>'+
+                        '<td>'+
+                            '<select class="form-select lista'+i+'" id="dep'+response.data[i].inventario_id+'">'+
+                                '<option >Choose...</option>'+
+                            '</select>'+
+                        '</td>'+
+                        '<td>'+
+                            '<button class="btn btn-warning" type="button" onclick=actua_inve('+response.data[i].inventario_id+')>Guardar</button>'+
+                            '<button class="btn btn-danger" type="button" onclick=elimi_inve('+response.data[i].inventario_id+')>Eliminar</button>'+
+                        '</td>'
+
+                        
+                        ;
+					
+                    const ant = document.querySelector(".contenido"); 
+                    ant.insertAdjacentElement("afterbegin", app);
+                    
+                    categoria_select(i, cate);
+            }
+            });
+                                
+                </script>
+            </table>
+        </div>
+    </div>				
+</form>
+
+<%- include('../partial/footer.ejs'); %>

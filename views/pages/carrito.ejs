@@ -1,0 +1,81 @@
+<%- include('../partial/head.ejs'); %>
+    <%- include('../partial/menu.ejs'); %>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://releases.jquery.com/git/jquery-3.x-git.js"></script>
+    
+<script>
+
+        axios.get("http://localhost:3000/getcarrito")
+        .then((response)=>{
+        console.log(response.data);
+        var cantidad = response.data.length;
+        var total = 0;
+        for(i=0;i<cantidad;i++){
+            const app = document.createElement("tr");
+            app.id = "app" + i;
+            app.className += ""
+            app.innerHTML =
+                '<tr id="tr">' +
+                '<td id="td">' +
+                '    <img src="/img/queso.png" alt="..." height="80" width="100">' +
+                '</td>' +
+                '<td id="td">' +
+                    response.data[i].producto+
+                '</td>' +
+                '<td id="td">' +
+                '    <p>$'+response.data[i].precio+'</p>' +
+                '</td>' +
+                '<td> ' +
+                '    <button onClick=elimcarrito('+response.data[i].inventario_id+') id="borrar" type="button" class="btn btn-primary"id="borrar"><i class="ri-delete-bin-2-line"></i>Borrar</button>' +
+                '</td>'
+            '</tr>';
+            const ant = document.querySelector(".contenido");
+            ant.insertAdjacentElement("afterbegin", app);
+            total += response.data[i].precio;
+            
+
+    }
+        });
+    
+    
+
+
+</script>
+        <div class="container">
+            <div class="row pt-4 pb-5">
+                <table class="table table-warning table-striped">
+                    <thead class="text-center">
+
+                        <th scope="col"></th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Precio</th>
+                        <th></th>
+
+                    </thead> 
+                    <tbody class="text-center table-group-divider contenido">
+
+
+                        <tr>
+                            
+                        </tr>
+                        <tr id="tr">
+                            <td></td>
+                                        <th>Total</th>
+                            <td>
+                                total
+                            </td>
+                            <td>
+                            <a href="/pagar">
+                                <h6> <i class="ri-money-dollar-circle-line"></i>Pagar </h6>
+                            </a>
+                            
+                        </td>
+                        
+                    </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div>
+        <%- include('../partial/footer.ejs'); %>

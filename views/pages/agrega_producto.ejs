@@ -1,0 +1,85 @@
+<%- include('../partial/head.ejs'); %>
+<%- include('../partial/menu.ejs'); %>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://releases.jquery.com/git/jquery-3.x-git.js"></script>
+<script>
+    function viajar(){
+            window.location.replace("consulta.html");
+        };
+        function addProduct(){
+            var inventario={};
+            inventario.producto = document.getElementById("pro").value;
+            inventario.cantidad = document.getElementById("can").value;
+            inventario.precio = document.getElementById("pre").value;
+            inventario.departamento = document.getElementById("dep").value;
+            console.log(inventario.departamento);
+            axios.post('http://localhost:3000/nuevoProducto',inventario).then((response)=>{
+                
+                console.log(response.inventario);
+                alert("Producto insertado...");
+                
+                
+                //window.location.href="productos.html";
+            })
+            .catch((error)=>{
+                alert("Error de insercion");
+                console.log(error);
+            });
+        }
+    </script>
+<div class="container pt-4 pb-5">
+    <div class="row" >
+        <div class="col-2"></div>
+        
+        <form action="/inventario" method="get" class="col-8">
+            
+            
+            <div class="input-group mb-3">
+                <span class="input-group-text" >Producto</span>
+                <input type="text" class="form-control" aria-label="descripcion" placeholder="Nombre del producto..." aria-describedby="basic-addon1" id="pro">
+                <span class="input-group-text" >Cantidad</span>
+                <input type="number" class="form-control" aria-label="cantidad" placeholder="Cantidad..." aria-describedby="basic-addon1" id="can">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" >Departamento</span>
+                <select class="form-select lista" id="dep">
+                    <option selected>Choose...</option> 
+                    
+                
+                    <script>
+                        axios.get("http://localhost:3000/categorias")
+                        .then((response)=>{
+                        console.log(response);
+                        
+                        var cantidad = response.data. length;
+                        for(i=0;i<cantidad;i++){
+                                const app = document.createElement("option"); // <div></div>
+                                app.id = "departamento"+i; 
+                                app.value += response.data[i].departamento_id;
+                                app.innerHTML =response.data[i].nombre;
+                                const ant = document.querySelector(".lista"); 
+                                ant.insertAdjacentElement("beforeend", app);
+                            
+                        }
+                        });
+                    </script>
+                </select>
+                <span class="input-group-text" >Precio</span>
+                <input type="text" class="form-control" aria-label="precio" placeholder="$---.--" aria-describedby="basic-addon1" id="pre">
+            </div>
+
+            <div class="input-group mb-3 justify-content-center " >
+                <div class="col-8">
+                    <button class="btn btn-warning" type="button" onclick=addProduct()>Agregar producto</button>
+                    <a class="btn btn-warning" type="button" href="/inventario">Regresar</a>
+                    <a class="btn btn-warning" type="button" href="/departamentos">Administrar departamentos</a>
+                </div>
+            </div>
+        </form>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+
+<%- include('../partial/nada.ejs'); %>

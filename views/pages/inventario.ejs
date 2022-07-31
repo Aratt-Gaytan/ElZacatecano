@@ -1,0 +1,49 @@
+<%- include('../partial/head.ejs'); %>
+<%- include('../partial/menu.ejs'); %>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<div class="container mt-3">
+    <a class="btn btn-warning " role="button" aria-disabled="true" href="agrinv">Agregar productos</a>
+    <a class="btn btn-warning " role="button" aria-disabled="true" href="admininv">Administrar inventario</a>
+    <div class="row pt-1 pb-5">
+        <table class="table table-warning table-striped mt-3" id="productTable">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Cantidad en almacen</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Id de departamento</th>
+                    <th scope="col">Nombre</th>
+                    
+                </tr>
+            </thead>
+            <tbody class="text-center table-group-divider contenido">
+            </tbody>
+            <script>
+                axios.get("http://localhost:3000/productos")
+            .then((response)=>{
+            console.log(response);
+            var table = document .getElementById("productTable");
+            var longTable = table.rows.length;
+            var cantidad = response.data.length;
+            for(i=0;i<cantidad;i++){
+                var row = table.insertRow(i+1);
+                var cell = row.insertCell(0);
+                cell.innerHTML = response.data[i].producto;
+                var cell = row.insertCell(1);
+                cell.innerHTML = response.data[i].cantidad;
+                var cell = row.insertCell(2);
+                cell.innerHTML = response.data[i].precio;
+                var cell = row.insertCell(3);
+                cell.innerHTML = response.data[i].departamento_id; 
+                var cell = row.insertCell(4);
+                cell.innerHTML = response.data[i].nombre;
+            }
+            });
+            </script>
+        </table>
+    </div>
+</div>
+<%- include('../partial/footer.ejs'); %>
