@@ -13,7 +13,7 @@
             inventario.precio = document.getElementById("pre").value;
             inventario.departamento = document.getElementById("dep").value;
             console.log(inventario.departamento);
-            axios.post('http://localhost:3000/nuevoProducto',inventario).then((response)=>{
+            axios.post('https://elzacatecano.herokuapp.com/nuevoProducto',inventario).then((response)=>{
                 
                 console.log(response.inventario);
                 alert("Producto insertado...");
@@ -48,7 +48,7 @@
                     
                 
                     <script>
-                        axios.get("http://localhost:3000/categorias")
+                        axios.get("https://elzacatecano.herokuapp.com/categorias")
                         .then((response)=>{
                         console.log(response);
                         
