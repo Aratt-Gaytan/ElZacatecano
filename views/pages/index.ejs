@@ -43,7 +43,7 @@
             var inventario={};
             inventario.id_inv = id;
             console.log(inventario.id_inv);
-            axios.post('https://elzacatecano.herokuapp.com/agregacarrito',inventario).then((response)=>{                
+            axios.post('http://localhost:3000/agregacarrito',inventario).then((response)=>{                
                 alert("Se añadio a tu carrito");
                 console.log("nel");
                 //window.location.href="productos.html";
@@ -53,7 +53,7 @@
                 console.log(error);
             });
         }
-axios.get("https://elzacatecano.herokuapp.com/productos")
+axios.get("http://localhost:3000/productos")
     .then((response)=>{
         console.log(response);
         var cantidad = response.data. length;
@@ -63,7 +63,7 @@ axios.get("https://elzacatecano.herokuapp.com/productos")
             app.id = "app"+response.data[i].inventario_id; 
             app.className += "col-4"
             app.innerHTML ='<div class="card bg-light" style="width: 18rem; margin: 1rem ; ">'+
-                '<img src="/img/queso.png" class="card-img-top" alt="..."></img>'+
+                '<img src="'+ response.data[i].img_url +'" class="card-img-top" alt="..."></img>'+
                 '<div class="card-body">'+
                     '<h5 class="card-title"> '+ response.data[i].producto +'</h5>'+
                     '<p class="card-text">' + response.data[i].nombre  +'</p>'+
@@ -79,5 +79,6 @@ axios.get("https://elzacatecano.herokuapp.com/productos")
     
     
 </script>
+
 
 <%- include('../partial/footer.ejs'); %>

@@ -1,0 +1,130 @@
+<%- include('../partial/head.ejs'); %>
+<%- include('../partial/menu.ejs'); %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-warning table-striped mt-3" id="productTable">
+                <thead class="text-center">
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="text-center table-group-divider contenido">
+                </tbody>
+                <script>
+                    function actua_depa(id){
+                        var inventario={};
+                        inventario.id = id;
+                        inventario.departamento = document.getElementById("nom"+id).value;
+                        console.log(inventario);
+                        axios.post('http://localhost:3000/act_cat',inventario).then((response)=>{
+                            
+                            console.log(response.inventario);
+                            alert("Departamento actualizado...");
+                            location.reload(true);
+                            
+                            //window.location.href="productos.html";
+                        })
+                        .catch((error)=>{
+                            alert("Error al actualizar");
+                            console.log(error);
+                            location.reload(true);
+                            
+                        });
+                    }
+                    function elimi_depa(id){
+                        var inventario={};
+                        inventario.id = id;            
+                        
+                        axios.post('http://localhost:3000/elimi_cat',inventario).then((response)=>{
+                            
+                            console.log(response.inventario);
+                            alert("Departamento eliminado...");
+                            location.reload(true);
+                            
+                            //window.location.href="productos.html";
+                        })
+                        .catch((error)=>{
+                            alert("Error al eliminar");
+                            console.log(error);
+                            location.reload(true);
+                            
+                        });
+                    }
+                    function agrega(){
+                        var inventario={};
+                        inventario.departamento = document.getElementById("nombre").value;
+                        console.log(inventario);
+                        axios.post('http://localhost:3000/nueva_cat',inventario).then((response)=>{
+                            
+                            console.log(response.inventario);
+                            alert("Departamento agregado...");
+                            location.reload(true);
+                            
+                            //window.location.href="productos.html";
+                        })
+                        .catch((error)=>{
+                            alert("Error al agregar");
+                            console.log(error);
+                            location.reload(true);
+                            
+                        });
+                    }
+                function obtendatos(){
+                    axios.get("http://localhost:3000/categorias")
+                .then((response) => {
+                    console.log(response.data);
+                    var cantidad = response.data.length;
+                    
+                    for (i = 0; i < cantidad; i++) {
+                        
+                        
+                        const app = document.createElement("tr");
+                        app.id = "app" + i;
+                        app.className += "";
+                        app.innerHTML =
+                            
+                        '<td>' +
+                            '<input type="text" class="form-control" aria-label="descripcion" value="'+response.data[i].nombre+'" aria-describedby="basic-addon1" id="nom'+response.data[i].departamento_id+'">'+
+                        '</td>'+
+                        '<td>' +
+                            '<button class="btn btn-warning" type="button" onclick=actua_depa('+response.data[i].departamento_id+')>Guardar</button>'+
+                        '</td>'+
+                        '<td>' +
+                            '<button class="btn btn-danger" type="button" onclick=elimi_depa('+response.data[i].departamento_id+')>Eliminar</button>'+
+                        '</td>';
+                        const ant = document.querySelector(".contenido");
+                        ant.insertAdjacentElement("afterbegin", app);
+                            }
+                        })
+                    .catch((error)=>{
+                        console.log(error);
+                    });
+                }    
+                obtendatos()
+                </script>
+            </table>
+        </div>
+        <div class="col-6 text-center">
+            
+                
+            
+                <h4 class="pb-5"> Departamento nuevo </h4>
+
+                <div class="input-group mb-3">
+                    <input type="text" class=" form-control" aria-label="nombre" aria-describedby="basic-addon1" name="nombre" id="nombre">
+                    <span class="input-group-text" id="basic-addon2"><button type="button" class="btn btn-secondary" onClick="agrega()" >Agregar</button></span>
+                </div>
+                
+                
+            
+        
+        </div>
+    </div>
+</div>
+
+<%- include('../partial/footer.ejs'); %> 

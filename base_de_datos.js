@@ -10,17 +10,21 @@ const mysql = require("mysql2");
 //     }
 // );
 
+
 const connDB = mysql.createConnection(
+    
         {
             host: "bnqxl4mnbewdhuq7iyml-mysql.services.clever-cloud.com",
             user: "uu6ynju7fe7jnbgp",
-            password: "QsNZDCX9J3cq3zUWUMDu",
+            password: "kZ3dszPrIptKqyffsKuw",
             database: "bnqxl4mnbewdhuq7iyml",
             port : 3306
         }
     );
 
+
 connDB.connect(function(err){
+    
     if(err){
         console.log(err);
         return;

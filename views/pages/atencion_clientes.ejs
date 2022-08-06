@@ -2,4 +2,46 @@
 <%- include('../partial/head_wa.ejs'); %>
 
 
+<script>
+    function enviaReporte(){
+        var datos = {};
+        datos.asunto = document.getElementById("asunto").value;
+        datos.texto = document.getElementById("text").value;
+        console.log(datos)
+        axios.post('http://localhost:3000/send-mail', datos ).then((response)=>{        
+                alert("Mucgas gracias por tus comentarios, los tomaremos en cuenta y te enviaremos una solucion a tu problema atravez del email que nos has proporcionado. Una disculpa por las molestias");
+                //window.location.href="productos.html";
+            })
+            .catch((error)=>{
+                alert("Ha ocurrido un error");
+                console.log(error);
+            });
+    };
+    
+</script>
+    <div class="container justify-content-center" >
+        
+        <div class="container">
+            
+            <div class="row justify-content-center">
+                <h4 class="text-center">Reportar problema</h4>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Describe tu problema brevemente</span>
+                    <input type="text" class="form-control"  aria-label="asunto" aria-describedby="basic-addon1" id="asunto" name="asunto">
+                </div>
+                
+                <div class=" mb-3">
+                    <label class="input-group-text" id="basic-addon1">Explica que ocurrio con mas detalle</label>
+                    <textarea type="text-area" class="form-control" aria-label="text" aria-describedby="basic-addon1" id="text" name="text" rows="10"></textarea>
+                </div>
+                <div class="input-group mb-3 justify-content-center" >
+                    <button class="btn btn-warning" type="button" onclick=enviaReporte()>Enviar</button>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+
 <%- include('../partial/footer.ejs'); %>

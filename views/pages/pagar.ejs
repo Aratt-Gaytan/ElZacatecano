@@ -86,7 +86,7 @@
                         </tbody>
                         <script>
 
-                            axios.get("https://elzacatecano.herokuapp.com/getcarrito")
+                            axios.get("http://localhost:3000/getcarrito")
                                 .then((response) => {
                                     console.log(response.data);
                                     var cantidad = response.data.length;

@@ -1,0 +1,79 @@
+<%- include('../partial/head.ejs'); %>
+    <%- include('../partial/menu.ejs'); %>
+        <script>
+            
+            // obtiene los datos del usuario que ha iniciado sesion
+            axios.post("http://localhost:3000/obtperfil")
+            .then((response)=>{
+            // ingresa los datos en el formulario para poder editarlo
+            document.getElementById("nombre").value = response.data[0].nombre;
+            document.getElementById("app").value = response.data[0].apellido_pa;
+            document.getElementById("apm").value = response.data[0].apellido_ma;
+            document.getElementById("email").value = response.data[0].email;
+            document.getElementById("cel").value = response.data[0].numero_cel;
+            document.getElementById("calle").value = response.data[0].calle;
+            document.getElementById("num").value = response.data[0].num;
+            document.getElementById("frac").value = response.data[0].fraccionamiento;
+            document.getElementById("mun").value = response.data[0].municipio;
+            document.getElementById("est").value = response.data[0].estado;
+
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+            // al momento de editar el campo de contraseña no te permite enviar los datos hasta que esten iguales
+            function checa_pass(){
+                if(document.getElementById("pass1").value !=  document.getElementById("pass2").value)document.getElementById("listo").disabled = true;
+                    else document.getElementById("listo").disabled = false;
+            }
+        </script>
+        <div class="row" >
+            <div class="col-2"></div>
+        <div class="col-8 pt-4 pb-5 ">
+            <div class="card text-center">
+                <div class="card-header">
+                    Editar perfil 
+                </div>
+                <div class="card-body">
+                    <form action="/actuperfil" method="post" class=" text-center">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Nombre</span>
+                        <input type="text" class="form-control" placeholder="Nombre..." aria-label="Nombre" aria-describedby="basic-addon1" id="nombre" name="nombre">
+                        <input type="text" class="form-control" placeholder="Apellido paterno..." aria-label="Ap_pa" aria-describedby="basic-addon1" id="app" name="app">
+                        <input type="text" class="form-control" placeholder="Apellido materno..." aria-label="Ap_ma" aria-describedby="basic-addon1" id="apm" name ="apm">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Correo</span>
+                        <input type="email" class="form-control" placeholder="Correo Electronico..." aria-label="email" aria-describedby="basic-addon1" id="email" name="email">
+                        <span class="input-group-text" id="basic-addon1">N° celular</span>
+                        <input type="text" class="form-control" placeholder="Celular" aria-label="celular" aria-describedby="basic-addon1" id="cel" name="cel"> 
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Direccion</span>
+                        <input type="text" class="form-control" placeholder="Calle..." aria-label="calle" aria-describedby="basic-addon1" id="calle" name="calle" >
+                        <span class="input-group-text" id="basic-addon1">#</span>
+                        <input type="text" class="form-control" placeholder="Numero..." aria-label="num" aria-describedby="basic-addon1" id="num" name="num">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Direccion</span>
+                        <input type="text" class="form-control" placeholder="Fraccionamiento..." aria-label="fracc" aria-describedby="basic-addon1" id="frac" name="frac">
+                        <input type="text" class="form-control" placeholder="Municipio..." aria-label="mun" aria-describedby="basic-addon1" id="mun" name="mun">
+                        <input type="text" class="form-control" placeholder="Estado..." aria-label="est" aria-describedby="basic-addon1" id="est" name="est">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Cambia tu conraseña </span>
+                        <input type="password" class="form-control" placeholder="Escribe tu contraseña..." onchange="checa_pass()" aria-label="contra" aria-describedby="basic-addon1" id="pass1" name="pass1">
+                        <input type="password" class="form-control" placeholder="Repite tu contraseña..." onchange="checa_pass()" aria-label="contra2" aria-describedby="basic-addon1" id="pass2" name="pass2">
+                        
+                </div>
+                
+                <div class="input-group mb-3">
+                        <button type="submit" class="btn btn-warning" id="listo" >Listo</button>
+                        
+                </div>
+            </form>
+            </div>
+        </div>    
+    </div>
+    </div>
+<%- include('../partial/footer.ejs'); %>

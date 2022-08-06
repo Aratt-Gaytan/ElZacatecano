@@ -1,0 +1,10 @@
+{
+    "service": "gmail",
+    "auth": {
+        "type": "OAuth2",
+        "user": "atencionaclienteselzacatecano@gmail.com",
+        "clientId": "486050364591-8qv34288p3akmsqh55i4it69pbh8f4gi.apps.googleusercontent.com",
+        "clientSecret": "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",
+        "refreshToken": "1//04wI2uHaurhG5CgYIARAAGAQSNwF-L9IruGyQ-XbT4kPDbMvrZJ0F2k2V4V248mVJ65zB02G6s8JOOarMXJIrc-IyIFT_zzd8JZE"
+    }
+}

@@ -5,7 +5,7 @@
           usuario={};
           usuario.nombre=document.getElementById("nom").value;
           usuario.contraseña=document.getElementById("con").value;
-          axios.post("https://elzacatecano.herokuapp.com/login", administrador)
+          axios.post("http://localhost:3000/login", administrador)
           .then((response)=>{
             console.log(response.data.token);
             sessionStorage.setItem("tToken1", response.data.token);
