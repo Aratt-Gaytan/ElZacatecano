@@ -3,7 +3,7 @@
         <script>
             
             // obtiene los datos del usuario que ha iniciado sesion
-            axios.post("http://localhost:3000/obtperfil")
+            axios.post("https://elzacatecano.herokuapp.com/obtperfil")
             .then((response)=>{
             // ingresa los datos en el formulario para poder editarlo
             document.getElementById("nombre").value = response.data[0].nombre;
