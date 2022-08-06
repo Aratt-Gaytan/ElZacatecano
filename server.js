@@ -256,7 +256,7 @@ app.get("/getcarrito", function (req, res) {
     let id = req.session.user;
     // console.log(id)
     respuesta = {};
-    dbTienda.query("select u.usuario_id, i.inventario_id, i.producto, i.precio, i.cantidad" +
+    dbTienda.query("select u.usuario_id, i.inventario_id, i.producto, i.precio, i.cantidad, i.img_url" +
         " from inventario i " +
         " join usuario_has_inventario ui on i.inventario_id = ui.inventario_inventario_id" +
         " join usuario u on u.usuario_id = ui.usuario_usuario_id" +
