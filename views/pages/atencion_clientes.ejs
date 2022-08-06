@@ -8,7 +8,7 @@
         datos.asunto = document.getElementById("asunto").value;
         datos.texto = document.getElementById("text").value;
         console.log(datos)
-        axios.post('http://localhost:3000/send-mail', datos ).then((response)=>{        
+        axios.post('https://elzacatecano.herokuapp.com/send-mail', datos ).then((response)=>{        
                 alert("Mucgas gracias por tus comentarios, los tomaremos en cuenta y te enviaremos una solucion a tu problema atravez del email que nos has proporcionado. Una disculpa por las molestias");
                 //window.location.href="productos.html";
             })
