@@ -1,3 +1,4 @@
+
 var express = require("express");
 var ejs = require("ejs");
 const session = require("express-session");
@@ -256,7 +257,7 @@ app.get("/getcarrito", function (req, res) {
     let id = req.session.user;
     // console.log(id)
     respuesta = {};
-    dbTienda.query("select u.usuario_id, i.inventario_id, i.producto, i.precio, i.cantidad, i.img_url" +
+    dbTienda.query("select u.usuario_id, i.inventario_id, i.producto, i.precio, i.cantidad" +
         " from inventario i " +
         " join usuario_has_inventario ui on i.inventario_id = ui.inventario_inventario_id" +
         " join usuario u on u.usuario_id = ui.usuario_usuario_id" +
@@ -289,6 +290,7 @@ app.get("/cerrarsesion", function (req, res) {
     req.session.loggedin = false;
     req.session.username = null;
     req.session.id = null
+    req.session.isadmin = null;
     res.redirect("/");
 });
 
@@ -314,6 +316,7 @@ app.post("/auth", function (request, response) {
                     // Authenticate the user
                     request.session.loggedin = true;
                     request.session.username = username;
+                    request.session.isadmin = false;
                     request.session.user = rows[0].usuario_id;
 
                     // Redirect to home page
@@ -362,6 +365,26 @@ app.post("/registrar", function (req, res) {
 app.get("/inventario", function (req, res) {
     res.render("pages/inventario");
 });
+
+
+app.get("/buscarproductos", (req, res) => {
+    respuesta = {};
+    id = req.body.id;
+    dbTienda.query(" select i.inventario_id , i.producto , i.cantidad , i.precio, i.img_url , d.departamento_id , d.nombre from inventario i, departamento d where i.departamento_id like '%?%' and i.producto like '%?%' group by 1;",
+        [id],
+        (err, rows, fields) => {
+            if (err) {
+                respuesta.estado = false;
+                respuesta.mensaje = err;
+                res.json(respuesta);
+            }
+            else {
+                // console.log("ok");
+                res.json(rows);
+            }
+        });
+});
+
 
 app.get("/productos", (req, res) => {
     respuesta = {};
@@ -489,7 +512,7 @@ app.post("/act_inv", (request, response) => {
     
     var respuesta = {};
     
-    dbTienda.query('UPDATE inventario SET producto = ?, cantidad = ?, precio = ? , departamento_id = ? WHERE inventario.inventario_id = ? ; ', [producto, cantidad, precio, categoria, id], function (err, rows, fields) {
+    dbTienda.query('UPDATE inventario SET producto = ?, cantidad = ?, precio = ? , departamento_id = ? WHERE inventario.inventario_id = ? ; ', [producto, cantidad, precio, categoria,id], function (err, rows, fields) {
         if (!err) {
             respuesta.estado = true;
             respuesta.comentario = "Producto insertado correctamente";
@@ -729,7 +752,7 @@ app.get("/atencioncliente", function (req, res) {
 app.post("/send-mail", (req, res) => {
     var dbTienda = DB.connDB;
 
-    dbTienda.query("select concat(nombre,' ', apellido_pa , ' ' , apellido_ma) as nombre_com, email from usuario where usuario_id = ?;",
+    dbTienda.query("select usuario_id, concat(nombre,' ', apellido_pa , ' ' , apellido_ma) as nombre_com, email from usuario where usuario_id = ?;",
         [req.session.user],
         (error, rows, field) => {
             if (error) throw error;
@@ -738,7 +761,24 @@ app.post("/send-mail", (req, res) => {
             else {
                 let asunto = req.body.asunto;
                 let texto = req.body.texto;
-
+                const hoy = new Date();
+                function formatoFecha(fecha, formato) {
+                    const map = {
+                        dd: fecha.getDate(),
+                        mm: fecha.getMonth() + 1,
+                        yy: fecha.getFullYear().toString().slice(-2),
+                        yyyy: fecha.getFullYear()
+                    }
+                
+                    return formato.replace(/dd|mm|yy|yyy/gi, matched => map[matched])
+                }
+                fecha = formatoFecha(hoy, 'dd-mm-yyyy');
+                dbTienda.query("INSERT INTO soportetecnico (contenido, fecha, usuario_usuario_id, asunto) VALUES (?, ?, ?, ?);",
+                    [texto, fecha, rows[0].usuario_id, asunto  ],
+                    (error, row, field) => {
+                        if (error) throw error;
+                        // console.log(field);
+                    });
                 // console.log(rows);
                 cadena = `
                     Nombre ${rows[0].nombre_com}
@@ -804,6 +844,63 @@ app.post("/send-mail", (req, res) => {
 });
 
 
+app.get("/admin", function (req, res) {
+    
+    
+    res.render('pages/loginadmin');
+    
+    
+});
+
+
+app.post("/admin/auth", function (request, response) {
+    let username = request.body.correo;
+    let password = request.body.pass;
+    // Ensure the input fields exists and are not empty
+    if (username && password) {
+        var dbTienda = DB.connDB;
+        // Execute SQL query that'll select the account from the dbTienda based on the specified username and password
+        dbTienda.query(
+            "SELECT * FROM administrador WHERE email = ? AND contraseña = sha1(?)",
+            [username, password],
+            function (error, rows, fields) {
+                // If there is an issue with the query, output the error
+                if (error) throw error;
+                // If the account exists
+                if (rows.length > 0) {
+                    // Authenticate the user
+                    request.session.loggedin = true;
+                    request.session.username = username;
+                    request.session.isadmin = true;
+                    request.session.user = rows[0].usuario_id;
+
+                    // Redirect to home page
+                    response.redirect("/admin/inicio");
+                } else {
+                    response.render("pages/loginadmin");
+                    request.body.correo = username;
+                }
+                response.end();
+            }
+        );
+    } else {
+        response.render("pages/loginadmin");
+    }
+});
+
+
+app.post("/sesion", function(req, res){
+    // console.log(req.session.isadmin);
+    sesion = req.session;
+    res.json(sesion);
+});
+
+
+app.get("/admin/inicio", function (req, res) {
+    res.render('pages/inicio');
+    
+    
+});
 
 app.listen(process.env.PORT || 5000);
 console.log("I`m running in port 5000");

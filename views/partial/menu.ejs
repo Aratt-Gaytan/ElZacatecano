@@ -9,17 +9,30 @@
     </button>
     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
       <div class="navbar-nav contenid" id="inv">
-        <a class="nav-link active" aria-current="page" href="atencioncliente"> <i class="ri-customer-service-2-line"></i>Atencion al cliente</a>
-        <a class="nav-link active" aria-current="page" href="carrito"> <i class="ri-shopping-cart-2-line"></i>Carrito</a>
-        <a class="nav-link active" aria-current="page" href="inventario" id="acceso"><i class="ri-book-open-line"></i> Inventario </a>
+        <a class="nav-link active" aria-current="page" href="atencioncliente" id="admat"> <i class="ri-customer-service-2-line"></i>Atencion al cliente</a>
+        <a class="nav-link active" aria-current="page" href="carrito" id="usca"> <i class="ri-shopping-cart-2-line"></i>Carrito</a>
+        <a class="nav-link active" aria-current="page" href="inventario" id="adminv"><i class="ri-book-open-line"></i> Inventario </a>
         <script>
-          var acc = true;
-          if(acc){
-            document.getElementById('acceso').style.display = '';
+          axios.post("https://elzacatecano.herokuapp.com/sesion")
+        .then((response)=>{
+          console.log(response.data);
+          if(response.data.isadmin){
+            document.getElementById('adminv').style.display = '';
+            document.getElementById('admat').style.display = 'none';
+            document.getElementById('perfil').style.display = 'none';
+            document.getElementById('usca').style.display = 'none'; // hide
           }
           else{
-            document.getElementById('acceso').style.display = 'none'; // hide
+            document.getElementById('adminv').style.display = 'none';
+            document.getElementById('admat').href = '/atencioncliente';
+            document.getElementById('usca').style.display = ''; // hide
           }
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+          
+          
         </script>
         <!-- <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Buscar producto..." aria-label="Search">
@@ -30,7 +43,7 @@
     </div>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup" >
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="perfil"> <i class="ri-account-circle-line"></i>Perfil</a>
+        <a class="nav-link active" aria-current="page" href="perfil" id="perfil"> <i class="ri-account-circle-line"></i>Perfil</a>
         
       </div>
     </div>

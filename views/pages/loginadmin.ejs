@@ -2,10 +2,10 @@
 <%- include('../partial/head_wa.ejs'); %>
 <script>
     function login(){
-          usuario={};
-          usuario.nombre=document.getElementById("nom").value;
-          usuario.contraseña=document.getElementById("con").value;
-          axios.post("https://elzacatecano.herokuapp.com/login", usuario)
+          admin={};
+          admin.nombre=document.getElementById("nom").value;
+          admin.contraseña=document.getElementById("con").value;
+          axios.post("https://elzacatecano.herokuapp.com/admin/login", admin)
           .then((response)=>{
             console.log(response.data.token);
             sessionStorage.setItem("tToken1", response.data.token);
@@ -22,9 +22,9 @@
     <div class="row" >
         <div class="col-2"></div>
         
-        <form action="/auth" method="post" class="col-8">
+        <form action="/admin/auth" method="post" class="col-8">
             <div class="input-group mb-3">
-                <span class="input-group-text" id="nom">Correo electronico</span>
+                <span class="input-group-text" id="nom">Correo electronico de administrador</span>
                 <input type="email" class="form-control" placeholder="Correo Electronico..." aria-label="email" aria-describedby="basic-addon1" name="correo">
             </div>
             
@@ -33,16 +33,12 @@
                 <input type="password" class="form-control" placeholder="Escribe tu contraseña..." aria-label="contra" aria-describedby="basic-addon1" name="pass">
             </div>
             <div class="input-group mb-3 justify-content-center " >
-                <div class="col-4">
+                <div class="col-6">
                     <button class="btn btn-warning" type="submit">Iniciar sesion</button>
-                
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                     
-                    <a href="/admin">Soy administrador</a>
-                </div>
-                <div class="col-4">
-                    <a href="/registrarse">Registrate aquí si no tienes cuenta</a>
+                    <a href="/iniciarsesion">Soy usuario</a>
                 </div>
             </div>
         </form>

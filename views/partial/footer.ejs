@@ -1,8 +1,25 @@
   <footer class=" bd-footer bg-light pt-4 pb-5" >
     
-    <p class="text-center"> Accediste con el usuario _. <a href="/cerrarsesion">Cerrar Sesion.</a></p>
-    <a class="nav-link active text-center" aria-current="page" href="/atencioncliente">Atencion a Clientes</a>
+    <p class="text-center" id="texto">  </p>
+    <a class="nav-link active text-center" aria-current="page" href="#">Atencion a Clientes</a>
   </footer>
+  <script>
+    axios.post("https://elzacatecano.herokuapp.com/sesion")
+        .then((response)=>{
+          console.log(response.data.isadmin);
+          if(response.data.isadmin){
+            document.getElementById('texto').innerHTML= 'Accediste con el administrador ' + response.data.username +' <a href="/cerrarsesion">Cerrar Sesion.</a>';
+            // console.log(document.getElementById('texto'));
+          }
+          else{
+            document.getElementById('texto').innerHTML = 'Accediste con el usuario ' + response.data.username +' <a href="/cerrarsesion">Cerrar Sesion.</a>';
+          }
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+  </script>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 </html> 
